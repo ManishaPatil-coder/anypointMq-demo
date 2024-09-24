@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="2" doc:name="Circuit breaker" doc:id="ceb9b7b4-1cb2-4d07-bd88-3d1f279a5608" onErrorTypes="HTTP:TIMEOUT" errorsThreshold="2" tripTimeoutUnit="MINUTES"/>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="caa8b90a-e303-42b8-900d-5315fbdfb387" >
+		<http:request-connection host="localhost" port="9089" />
+	</http:request-config>
+	<flow name="CircuitbreakerdemoFlow" doc:id="b581eb56-f4b8-46c3-bc00-1c3021c22370" >
+		<http:listener doc:name="Listener" doc:id="d6797ebf-3c70-40e0-92ae-d7d95b15cd3b" config-ref="HTTP_Listener_config" path="/testcircuitbreaker"/>
+		<anypoint-mq:publish doc:name="Publish" doc:id="90e711ee-913a-47af-af8c-753c9bbda66a" config-ref="Anypoint_MQ_Config" destination="testCB"/>
+		<logger level="INFO" doc:name="Logger" doc:id="bf936251-fef0-45f2-acd5-135a603bb1fb" message="#[payload]"/>
+	</flow>
+	<flow name="Circuitbreakerdemo_Subscriber_Flow" doc:id="1ba85224-0a99-43d6-80e6-83a18c6fe0aa" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="0a260248-654c-49e3-8048-45ef347bc550" config-ref="Anypoint_MQ_Config" circuitBreaker="Circuit_breaker" destination="testCB"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ad077803-9ebd-46ed-babc-c3c3b4046722" message="#[payload]"/>
+		<http:request method="GET" doc:name="Request" doc:id="8c67de1e-7a97-4b39-a6c0-3a57268a1932" config-ref="HTTP_Request_configuration" url="http://localhost:9089/fghjjkk"/>
+	</flow>
+</mule>

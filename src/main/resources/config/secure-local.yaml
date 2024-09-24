@@ -1,0 +1,4 @@
+mq:
+  clientappid: "![3cS7nSFldUC65ct+YDnMPZOhsVd6JpF7gWS8ETENlcZWPE5g6Tmz0A==]"
+  clientsecret: "![suCH3Z0g4Fi4JT/kTrgwb4GbgAdeNpFSqJCm53EwpBXsMoHnPgw+UA==]"
+  URL: "https://mq-us-east-1.anypoint.mulesoft.com/api/v1/organizations/664b0a82-dbaa-4b8c-98ad-6de269723d8f/environments/7186939e-d815-44b2-a5ab-336cdd1516f3"

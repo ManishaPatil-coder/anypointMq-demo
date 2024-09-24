@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+	<flow name="anypointmqdemo-publishFlow" doc:id="fd7de770-e2a0-4efd-b402-d97491b2a42c" >
+		<http:listener doc:name="Listener" doc:id="3d282da6-c559-4a1b-8cc7-62e1086045e7" config-ref="HTTP_Listener_config" path="test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="bd2215ec-c22b-4b51-8252-3d19561adb57" message="Testqueue flow started"/>
+		<anypoint-mq:publish doc:name="Publish" doc:id="4a83fb16-4f66-4bec-8bc6-6be5b2f5b19a" config-ref="Anypoint_MQ_Config" destination="testqueue"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b24e6dde-a48e-4ffe-aacf-1ee2e807f621" message="Testqueue flow ended"/>
+	</flow>
+</mule>

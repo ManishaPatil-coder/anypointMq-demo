@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="anypointmqdemo-subscribeFlow-AutoMode" doc:id="75e953d1-773c-418f-9f1e-0e55f3923bb0" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="e4694031-2fee-463a-94b9-9f4fa20d1ceb" config-ref="Anypoint_MQ_Config" destination="testqueue"/>
+		<logger level="INFO" doc:name="Logger" doc:id="bf006230-7e2b-4910-bb8d-26d1bf2f039c" message="message received successfully"/>
+	</flow>
+	<flow name="anypointmqdemo-subscribeFlow-IntroducedError-AutoMode" doc:id="4c7d5093-74b9-4386-a760-06810081b89b" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="7bf44907-49b2-4f3d-a828-4bdadaea8e9f" config-ref="Anypoint_MQ_Config" destination="testqueue"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e17d082b-23fa-4299-bd63-e95be8455271" message="message received successfully"/>
+		<http:request method="GET" doc:name="Request" doc:id="32afb0f4-96cc-43df-8a64-b217898c6aa0" url="https://localhost:9090/test2"/>
+	</flow>
+	<flow name="anypointmqdemo-subscribeFlow-IntroducedError-ImmediateMode" doc:id="e99803c5-137e-4bd7-bd98-d9b67de675dd" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="cc2884a4-126b-465b-81d0-aa03b4ca2645" config-ref="Anypoint_MQ_Config" destination="testqueue" acknowledgementMode="IMMEDIATE"/>
+		<logger level="INFO" doc:name="Logger" doc:id="5a24f225-f390-4a1b-a131-87940cf37d37" message="message received successfully"/>
+		<http:request method="GET" doc:name="Request" doc:id="33c314c6-6909-424c-9c58-49db8da34c2d" url="https://localhost:9090/test2"/>
+	</flow>
+	<flow name="anypointmqdemo-subscribeFlow-IntroducedError-ManualMode" doc:id="33ee7025-ad81-4e2c-b2ce-cfee82b5c85c" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="2505f310-f3d3-46c7-b364-afe0272f3a8f" config-ref="Anypoint_MQ_Config" destination="testqueue" acknowledgementMode="MANUAL"/>
+		<logger level="INFO" doc:name="Logger" doc:id="577c6255-147f-46b4-80cc-5e2bc7aeb6ab" message="message received successfully"/>
+		<http:request method="GET" doc:name="Request" doc:id="4635c69d-b0e7-434f-af72-9a98fca0568b" url="https://localhost:9090/test2"/>
+		<anypoint-mq:ack doc:name="Ack" doc:id="fbecf15b-7a88-41b4-b1b8-b424def8bf8b" config-ref="Anypoint_MQ_Config" ackToken="#[attributes.ackToken]"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7919f32a-8a47-4680-8e89-058524389ada" >
+				<anypoint-mq:nack doc:name="Nack" doc:id="933af5e7-62a5-4553-8ca8-899e1910a035" config-ref="Anypoint_MQ_Config" ackToken="#[attributes.ackToken]"/>
+			</on-error-propagate>
+		</error-handler>
+	
+</flow>
+<flow name="anypointmqdemo-subscribeFlow-ManualMode" doc:id="855921d7-7311-4399-8e5a-8abffbb05d54" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="30cbc9bc-c6aa-4fcc-97ec-3e30f3dca71a" config-ref="Anypoint_MQ_Config" destination="testqueue" acknowledgementMode="MANUAL"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b5e124ac-67fa-4406-8e9c-76cf972357e7" message="#[payload]"/>
+		<anypoint-mq:ack doc:name="Ack" doc:id="0456b559-1a7d-45ff-9927-4635d5130f81" config-ref="Anypoint_MQ_Config" ackToken="#[attributes.ackToken]"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9693b1fe-e7ed-4428-83d5-f08e3ecd5022" >
+				<anypoint-mq:nack doc:name="Nack" doc:id="dc097862-7f63-4f0c-9e80-d28e9ae04125" config-ref="Anypoint_MQ_Config" ackToken="#[attributes.ackToken]"/>
+			</on-error-propagate>
+		</error-handler>
+	
+</flow>
+</mule>
